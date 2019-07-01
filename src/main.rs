@@ -50,7 +50,7 @@ fn main() -> Result<(), failure::Error> {
     if let Some(score) = scores.last() {
         println!("{}", score);
     }
-    let scores = calculator::calc("東東東南南南西西西北北[^発発発発]", Vec::new(), false)?;
+    let scores = calculator::calc("東東東南南南西西西北北(発発発発)", Vec::new(), false)?;
     if let Some(score) = scores.last() {
         println!("{}", score);
     }

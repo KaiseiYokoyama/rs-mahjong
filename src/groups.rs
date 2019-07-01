@@ -297,6 +297,24 @@ impl FromStr for Hand {
                 open_sets.push(OpenSet::from_str(&store_tmp)?);
                 // 一時変数を初期化
                 store_tmp = String::new();
+            } else if c == '(' {
+                // これまでの並びを登録
+                if store_tmp.len() != 0 {
+                    let TilesNewType(mut tiles_tmp) = TilesNewType::from_str(&store_tmp)?;
+                    tiles.append(&mut tiles_tmp);
+                }
+                // 鳴き成立の面子の譜面を読み取る
+                let mut chars = Vec::new();
+                while let Some(c) = iter.next() {
+                    if c == ')' { break; }
+                    chars.push(c);
+                }
+                store_tmp = chars.iter().collect();
+                let TilesNewType(mut tiles_tmp) = TilesNewType::from_str(&store_tmp)?;
+                // 登録
+                open_sets.push(OpenSet::ConcealedKong(tiles_tmp));
+                // 一時変数を初期化
+                store_tmp = String::new();
             } else {
                 store_tmp.push(c);
             }
@@ -361,9 +379,6 @@ impl FromStr for OpenSet {
     type Err = failure::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let concealed = s.contains('^');
-        let s = s.replace('^', "");
-
         // 中身
         let TilesNewType(mut vec) = TilesNewType::from_str(&s)?;
         vec.sort();
@@ -383,14 +398,8 @@ impl FromStr for OpenSet {
             }
             4 => {
                 if vec.is_flat() {
-                    // 槓子
-                    if concealed {
-                        // 暗槓
-                        Ok(OpenSet::ConcealedKong(vec))
-                    } else {
-                        // 明槓
-                        Ok(OpenSet::Kong(vec))
-                    }
+                    // 明槓 (暗槓はHand.parse()時に判断する)
+                    Ok(OpenSet::Kong(vec))
                 } else {
                     Err(format_err!("入力が不正です: [{}]", s))
                 }
