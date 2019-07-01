@@ -4,7 +4,7 @@ use std::fmt::{Display, Formatter, Error};
 
 /// 手牌をパースする
 #[derive(Debug)]
-pub struct Parser {
+pub struct ParsedHand {
     /// 手牌(晒した牌を含む)
     pub tiles: Vec<Tile>,
     /// 最終形候補
@@ -13,7 +13,7 @@ pub struct Parser {
     pub winning: Tile,
 }
 
-impl Parser {
+impl ParsedHand {
     pub fn new(hand: &Hand) -> Self {
         let mut tiles = hand.tiles.clone();
         hand.open_sets.iter().for_each(|open| {
@@ -51,15 +51,15 @@ impl Parser {
             }
             if sets.len() == 7 {
                 let node = Node { remaining: Vec::new(), open_sets: Vec::new(), sets, pong: Box::new(None), chow: Box::new(None) };
-                return Parser { tiles, nodes: vec![node], winning: hand.winning.clone() };
+                return ParsedHand { tiles, nodes: vec![node], winning: hand.winning.clone() };
             }
         }
 
-        Parser { tiles, nodes, winning: hand.winning.clone() }
+        ParsedHand { tiles, nodes, winning: hand.winning.clone() }
     }
 }
 
-impl Display for Parser {
+impl Display for ParsedHand {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "input: ")?;
         TilesNewType(self.tiles.clone()).fmt(f)?;
@@ -68,8 +68,7 @@ impl Display for Parser {
         self.nodes.iter().try_for_each(|node| {
             std::fmt::Display::fmt(node, f)?;
             writeln!(f, "")
-        })?;
-        Ok(())
+        })
     }
 }
 

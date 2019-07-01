@@ -310,7 +310,7 @@ impl FromStr for Hand {
                     chars.push(c);
                 }
                 store_tmp = chars.iter().collect();
-                let TilesNewType(mut tiles_tmp) = TilesNewType::from_str(&store_tmp)?;
+                let TilesNewType(tiles_tmp) = TilesNewType::from_str(&store_tmp)?;
                 // 登録
                 open_sets.push(OpenSet::ConcealedKong(tiles_tmp));
                 // 一時変数を初期化

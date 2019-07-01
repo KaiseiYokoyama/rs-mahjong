@@ -21,7 +21,7 @@ pub mod situation {
             Self { name: name.to_string(), han_value: Han(han_value) }
         }
 
-        fn han_value(&self) -> Han {
+        pub fn han_value(&self) -> Han {
             self.han_value.clone()
         }
 
@@ -71,7 +71,7 @@ pub mod situation {
 
 pub mod hand {
     use crate::yaku::YakuAttributes;
-    use crate::evaluate::Candidate;
+    use crate::evaluate::Wait;
     use crate::score::{Han, Fu};
     use crate::tiles::Tile;
 
@@ -80,7 +80,7 @@ pub mod hand {
         /// 名前
         pub name: String,
         /// ルール
-        pub rule: Box<Fn(&Candidate) -> Option<Han>>,
+        pub rule: Box<Fn(&Wait) -> Option<Han>>,
         /// 下位役
         pub sub: Option<Box<HandYaku>>,
         /// 府数(平和、七対子対応)
@@ -88,7 +88,7 @@ pub mod hand {
     }
 
     impl HandYaku {
-        pub fn new(name: &str, sub: Option<Box<HandYaku>>, rule: Box<Fn(&Candidate) -> Option<Han>>, fu: Option<Box<Fn(&bool) -> Fu>>) -> Self {
+        pub fn new(name: &str, sub: Option<Box<HandYaku>>, rule: Box<Fn(&Wait) -> Option<Han>>, fu: Option<Box<Fn(&bool) -> Fu>>) -> Self {
             HandYaku { name: name.to_string(), sub, rule, fu }
         }
     }
@@ -102,13 +102,13 @@ pub mod hand {
     pub struct Yakuman {
         pub name: String,
         /// ルール
-        pub rule: Box<Fn(&Candidate, &Vec<Tile>) -> u32>,
+        pub rule: Box<Fn(&Wait, &Vec<Tile>) -> u32>,
         /// 下位役
         pub sub: Option<Box<Yakuman>>,
     }
 
     impl Yakuman {
-        pub fn new(name: &str, rule: Box<Fn(&Candidate, &Vec<Tile>) -> u32>, sub: Option<Box<Yakuman>>) -> Self {
+        pub fn new(name: &str, rule: Box<Fn(&Wait, &Vec<Tile>) -> u32>, sub: Option<Box<Yakuman>>) -> Self {
             Yakuman { name: name.to_string(), rule, sub }
         }
     }
