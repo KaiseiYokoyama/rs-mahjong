@@ -1,0 +1,8 @@
+[package]
+name = "mahjong"
+version = "0.1.0"
+authors = [" <crome110mine@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+failure = "*"
