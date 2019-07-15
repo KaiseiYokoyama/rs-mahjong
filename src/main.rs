@@ -2,6 +2,14 @@ extern crate mahjong;
 use mahjong::calculator;
 
 fn main() -> Result<(), failure::Error> {
+    let scores = calculator::calc("222333444555m66p", &Vec::new(), false)?;
+    for score in &scores {
+        println!("{}", score);
+    }
+    let scores = calculator::calc("223344p5577m6699s", &Vec::new(), false)?;
+    for score in &scores {
+        println!("{}", score);
+    }
     let scores = calculator::calc("23344567s2p3p4p8m8m2s", &Vec::new(), false)?;
     if let Some(score) = scores.last() {
         println!("{}", score);

@@ -337,7 +337,17 @@ impl FromStr for Hand {
         // ソート
         tiles.sort();
 
+        println!("{}", &Hand { tiles: tiles.clone(), open_sets: open_sets.clone(), winning: winning.clone() });
+
         Ok(Hand { tiles, open_sets, winning })
+    }
+}
+
+impl Display for Hand {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        TilesNewType(self.tiles.clone()).fmt(f)?;
+        write!(f, " <{}> ", &self.winning)?;
+        self.open_sets.iter().try_for_each(|set| std::fmt::Display::fmt(set, f))
     }
 }
 

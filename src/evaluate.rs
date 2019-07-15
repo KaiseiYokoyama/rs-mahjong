@@ -40,10 +40,16 @@ impl Evaluator {
                                      Box::new(|candidate: &Wait| {
                                          if !candidate.closed() { return None; }
                                          match candidate {
-                                             Wait::Ryanmen(_, fu, _) => {
-                                                 if fu == &Fu(30) {
-                                                     Some(Han(1))
-                                                 } else { None }
+                                             Wait::Ryanmen(node, fu, _) => {
+                                                 if node.sets.iter().all(|set| match set {
+                                                     Set::Pung(_) => false,
+                                                     _ => true,
+                                                 }) {
+                                                     if fu == &Fu(30) || fu == &Fu(22) {
+                                                         return Some(Han(1));
+                                                     }
+                                                 }
+                                                 None
                                              }
                                              _ => None
                                          }

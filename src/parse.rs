@@ -148,9 +148,9 @@ pub struct Node {
     pub open_sets: Vec<OpenSet>,
     /// 手牌で成立している面子
     pub sets: Vec<Set>,
-    /// 子ノード
+    /// 子ノード(刻子を取った場合)
     pub pong: Box<Option<Node>>,
-    /// 子ノード
+    /// 子ノード(順子を取った場合)
     pub chow: Box<Option<Node>>,
 }
 
